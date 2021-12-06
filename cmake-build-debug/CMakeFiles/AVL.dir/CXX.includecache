@@ -1,0 +1,68 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/BinarySearchTree.cpp
+BinarySearchTree.h
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/BinarySearchTree.h
+
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/BinarySearchTree.h
+cstdlib
+-
+algorithm
+-
+ctgmath
+-
+
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/SquidGame.cpp
+SquidGame.h
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/SquidGame.h
+iostream
+-
+memory
+-
+
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/SquidGame.h
+group.h
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/group.h
+library.h
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/library.h
+
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/group.cpp
+group.h
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/group.h
+
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/group.h
+player.h
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/player.h
+BinarySearchTree.h
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/BinarySearchTree.h
+memory
+-
+iostream
+-
+
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/library.cpp
+SquidGame.h
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/SquidGame.h
+library.h
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/library.h
+
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/library.h
+
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/player.cpp
+player.h
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/player.h
+
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/player.h
+BinarySearchTree.h
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/BinarySearchTree.h
+memory
+-
+algorithm
+-
+
