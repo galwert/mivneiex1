@@ -8,6 +8,9 @@
 #include <cstdlib>
 #include <algorithm>
 #include <ctgmath>
+#include <iostream>
+#include <memory>
+#include "player.h"
 namespace Ehsan {
 
 
@@ -320,7 +323,17 @@ namespace Ehsan {
         treeDelete(toDelete->left);
         delete toDelete;
     }
+    template<class T,class S>
+    void printTree(BSTNode<T,S> * root) {
+        std::cout.flush();
+        if(root== nullptr)
+            return;
 
+        printTree(root->left);
+        std::cout<<root->key;
+        std::cout<<" BF: "<<BinarySearchTree<T,S>::calcHeightDiff(root)<<" Height: "<<root->height-1<<std::endl;
+        printTree(root->right);
+    }
     template<class T,class S>
     BSTNode<T,S> *insertInternal(BSTNode<T,S> *node, S key, T data) {
         if (key <= node->key) {
@@ -355,16 +368,18 @@ namespace Ehsan {
         BSTNode<T,S> *node = insertInternal(this->root, key, data);
         BSTNode<T,S>* place=node;
         while (node->parent != nullptr) {
+
             node->roll();
             node->height = BinarySearchTree<T,S>::getHeight(node);
             node = node->parent;
         }
-        if (node->roll() != nullptr) {
+        if (this->root->parent!= nullptr) {
             this->root = this->root->parent;
         }
         node->height = BinarySearchTree<T,S>::getHeight(node);
         return place;
     }
+
 
     template<class T,class S>
     BSTNode<T,S> *BinarySearchTree<T,S>::find(S key) {
@@ -401,15 +416,14 @@ namespace Ehsan {
         while (node != this->root && node != nullptr) {//added nullptr check by saleh, necessary?
             node->roll();
             node->height = BinarySearchTree<T,S>::getHeight(node);
-            if (node->parent == nullptr)
-            {
-                this->root = node;
-            }
             node = node->parent;
         }
-        if ( (node != nullptr) && (node->roll() != nullptr) ) {
-            this->root = this->root->parent;//problem occurs here - saleh?
-        }
+        if (node->parent != nullptr)
+            {
+                this->root = this->root->parent;
+            }
+
+
         if (node != nullptr)
         {
             node->height = BinarySearchTree<T,S>::getHeight(node);//saleh?
@@ -581,14 +595,8 @@ namespace Ehsan {
         S total_keys [this_nodes + other_nodes];
         T total_data[this_nodes + other_nodes];
         merge(this_data,this_keys,this_nodes,other_data,other_keys,other_nodes,total_data,total_keys);
-        // treeDelete(this->root);// I believe this is donw later, inside the group destructor!
         treeDelete(other.root);
-        int height=(int)ceil(log2(this_nodes + other_nodes));
         BSTNode<T,S> *newtree = createEmptyFullTree(total_keys,total_data,0,this_nodes + other_nodes-1);
-       // int *numberofleaves = new int();//the number of nodes to remove
-        //(*numberofleaves) = ((int)pow(2,height+1)) - (this_nodes + other_nodes + 1) ;
-        //clearLeaves(newtree,height+1,numberofleaves);//problem is here, continue from here!
-        //arrayToTree(newtree,total_keys,total_data,index);
         other.root = newtree;
 //        delete[] this_data;
 //        delete[] this_keys;

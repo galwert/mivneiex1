@@ -17,6 +17,12 @@ algorithm
 -
 ctgmath
 -
+iostream
+-
+memory
+-
+player.h
+/mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/player.h
 
 /mnt/c/Users/galwe/OneDrive/Desktop/technion/סמסטר ג/מבני נתונים/AVL/SquidGame.cpp
 SquidGame.h
@@ -64,5 +70,7 @@ BinarySearchTree.h
 memory
 -
 algorithm
+-
+iostream
 -
 

@@ -1,0 +1,33 @@
+Init
+AddGroup 390
+AddGroup 14
+AddGroup 101
+AddGroup 1453
+AddGroup 164
+AddGroup 1024
+AddGroup 544
+AddPlayer 390 390 9
+AddPlayer 544 544 9
+AddPlayer 1453 1453 5
+AddPlayer 164 164 5
+AddPlayer 14 14 5
+ReplaceGroup 14 544
+ReplaceGroup 390 1453
+RemovePlayer 14
+RemovePlayer  544
+ReplaceGroup 164 1024
+ReplaceGroup 544 1453
+ReplaceGroup 1024 164 
+GetAllPlayersByLevel 1453
+GetAllPlayersByLevel 164
+GetAllPlayersByLevel 1024
+GetAllPlayersByLevel 1453
+IncreaseLevel 390 3
+IncreaseLevel 14 3
+IncreaseLevel 101 3
+IncreaseLevel 1453 3
+IncreaseLevel 164 3
+IncreaseLevel 1024 3
+IncreaseLevel 544 3
+GetAllPlayersByLevel 1453
+Quit

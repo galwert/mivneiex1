@@ -83,7 +83,8 @@ namespace Ehsan
             return ALLOCATION_ERROR;
         }
 
-        return SUCCESS;   
+        return SUCCESS;
+
     }
 
     StatusType SquidGame::RemovePlayer(int PlayerID)
@@ -132,7 +133,12 @@ namespace Ehsan
         {
             return INVALID_INPUT;
         }
-        BSTNode<std::shared_ptr<Group>,int> *group_to_remove_node = this->groups.find(GroupID);//find should be in BST
+        int count=this->groups_with_players.countNodes(this->groups_with_players.root);
+        BSTNode<std::shared_ptr<Group>,int> *group_to_remove_node = this->groups.find(GroupID);//->ind should be in BST
+        if(count==6)
+        {
+            std::cout<<"";
+        }
         BSTNode<std::shared_ptr<Group>,int> *replacement_group_node = this->groups.find(ReplacementID);//find should be in BST
         if (replacement_group_node == nullptr || group_to_remove_node == nullptr)
         {
@@ -140,6 +146,7 @@ namespace Ehsan
         }
         std::shared_ptr<Group> group_to_remove = group_to_remove_node->data;
         std::shared_ptr<Group> replacement_group = replacement_group_node->data;
+
         if ( (group_to_remove->num_of_players) > 0)
         {
             // replacement_group->num_of_players += (group_to_remove->num_of_players);
@@ -148,14 +155,17 @@ namespace Ehsan
         }
         try
         {
+
             if(replacement_group->num_of_players==0&&group_to_remove->num_of_players>0)
             {
                 this->groups_with_players.insert(ReplacementID,replacement_group);
                 (this->num_of_groups_with_players)++;
             }
+            count=this->groups_with_players.countNodes(this->groups_with_players.root);
             group_to_remove->ReplaceGroup(replacement_group);
+            count=this->groups_with_players.countNodes(this->groups_with_players.root);
             this->groups.remove(group_to_remove->group_id);
-
+            count=this->groups_with_players.countNodes(this->groups_with_players.root);
         }catch(const std::bad_alloc& e){
             return ALLOCATION_ERROR;
         }
@@ -177,6 +187,10 @@ namespace Ehsan
         }
 
         std::shared_ptr<Player> player_to_find = player_to_find_node->data;
+        if(PlayerID==1525827268)
+        {
+            std::cout<<"dfgb";
+        }
         std::shared_ptr<Group> group_to_find = this->groups_with_players.find(player_to_find->groupid)->data;
         this->players_by_level.remove(IDRank(player_to_find->playerlevel,PlayerID));
 
@@ -255,7 +269,7 @@ namespace Ehsan
                     {
                         throw std::bad_alloc();
                     }
-                fillArrayWithIdsInDescendingOrder(myarray,index,this->players_by_level.root);
+                fillArrayWithIdsInDescendingOrder(myarray,index,this->num_of_players,this->players_by_level.root);
                     *Players=myarray;
                 }
                 delete index;
@@ -267,7 +281,7 @@ namespace Ehsan
                 if (group_to_find->num_of_players <= 0)
                 {
                     *(numOfPlayers) = 0;
-                    Players = nullptr;
+                    *Players = nullptr;
                 }
                 else
                 {
@@ -277,7 +291,7 @@ namespace Ehsan
                     {
                         throw std::bad_alloc();
                     }
-                    fillArrayWithIdsInDescendingOrder(myarray,index,group_to_find->players_by_rank.root);
+                    fillArrayWithIdsInDescendingOrder(myarray,index,group_to_find->num_of_players,group_to_find->players_by_rank.root);
                     *Players=myarray;
                 }
             }
@@ -319,10 +333,10 @@ namespace Ehsan
     void SquidGame::DeleteSquidGame()
     {
 
-        this->groups_with_players.treeDelete(this->groups_with_players.root);
+        /*this->groups_with_players.treeDelete(this->groups_with_players.root);
         this->groups.treeDelete((this->groups.root));
         this->players_by_id.treeDelete(this->players_by_id.root);
-        this->players_by_level.treeDelete(this->players_by_level.root);
+        this->players_by_level.treeDelete(this->players_by_level.root);*/
         delete this;
     }
 
@@ -365,18 +379,22 @@ namespace Ehsan
         return;
     }
 
-    void SquidGame::fillArrayWithIdsInDescendingOrder(int *array,int* index, BSTNode<std::shared_ptr<Player>,IDRank> *node)
+    void SquidGame::fillArrayWithIdsInDescendingOrder(int *array,int* index,int max, BSTNode<std::shared_ptr<Player>,IDRank> *node)
     {
         //I'm assuming there's enough room for every player.
         //It is the responsibility of the calling function to make that there's enough room for each player.
-        if (node == nullptr)
+        if (node == nullptr||(*index)==max)
         {
             return;
         }
-        fillArrayWithIdsInDescendingOrder(array,index,node->right);
+        fillArrayWithIdsInDescendingOrder(array,index,max,node->right);
+        if ((*index)==max)
+        {
+            return;
+        }
         array[*index] = (node->data->playerid);
         (*index)++;
-        fillArrayWithIdsInDescendingOrder(array,index,node->left);
+        fillArrayWithIdsInDescendingOrder(array,index,max,node->left);
         return;
     }
 

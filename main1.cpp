@@ -6,6 +6,7 @@ using namespace Ehsan;
 #include <random>
 #include <chrono>
 #include <algorithm>
+#include <memory>
 void printTree(BSTNode<int,int> * root) {
     std::cout.flush();
     if(root== nullptr)
@@ -13,11 +14,11 @@ void printTree(BSTNode<int,int> * root) {
 
     printTree(root->left);
     std::cout<<root->key;
-    std::cout<<" BF: "<<BinarySearchTree<int,int>::calcHeightDiff(root)<<" Height: "<<root->height-1<<std::endl;
+    std::cout<<" BF: "<<BinarySearchTree<std::shared_ptr<Player>,int>::calcHeightDiff(root)<<" Height: "<<root->height-1<<std::endl;
     printTree(root->right);
 }
-//int main1()
-//{
+int main1()
+{
 //    BinarySearchTree<int>* tree=new BinarySearchTree<int>();
 //
 //    /* Constructing tree given in
@@ -49,8 +50,8 @@ void printTree(BSTNode<int,int> * root) {
 //
 //    tree->remove(tree->root, 10);
 //
-//    printBT(tree->root);
-//}
+   printBT(tree->root);
+}
 int main1(){
     BinarySearchTree<int,int> tree;
 

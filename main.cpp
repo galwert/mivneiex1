@@ -341,7 +341,7 @@ void PrintAll(int *playerIDs, int numOfPlayers) {
 		cout << i + 1 << "\t||\t" << playerIDs[i] << endl;
 	}
 	cout << "and there are no more players!" << endl;
-        //free (playerIDs);
+        free(playerIDs);
 }
 
 static errorType OnGetAllPlayersByLevel(void* DS, const char* const command) {
@@ -375,7 +375,7 @@ void PrintGroupsHighest(int *playerIDs, int numOfGroups) {
 	}
 	cout << "and there are no more players!" << endl;
 
-	//free (playerIDs);
+	free (playerIDs);
 }
 
 static errorType OnGetGroupsHighestLevel(void* DS, const char* const command) {

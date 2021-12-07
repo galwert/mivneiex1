@@ -7,6 +7,7 @@
 #include "BinarySearchTree.h"
 #include <memory>
 #include <algorithm>
+#include <iostream>
 
 namespace Ehsan {
 
@@ -53,6 +54,7 @@ namespace Ehsan {
             {
                 return (!( (*this) > other));
             }
+        friend std::ostream& operator<<(std::ostream& os, const IDRank& idRank);
         };
 
     class Player {

@@ -33,7 +33,7 @@ namespace Ehsan
 
         void UpdateChampionAfterLevelIncrease(std::shared_ptr<Player> player);
 
-        void fillArrayWithIdsInDescendingOrder(int *array,int* index, BSTNode<std::shared_ptr<Player>,IDRank> *node);
+        void fillArrayWithIdsInDescendingOrder(int *array,int* index,int max, BSTNode<std::shared_ptr<Player>,IDRank> *node);
 
         void fillArrayWithChampionIdsInAscendingOrder(int *array,int* index,int max, BSTNode<std::shared_ptr<Group>,int> *node);
 

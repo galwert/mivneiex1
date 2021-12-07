@@ -3,6 +3,7 @@
 
 CMakeFiles/AVL.dir/BinarySearchTree.cpp.o: ../BinarySearchTree.cpp
 CMakeFiles/AVL.dir/BinarySearchTree.cpp.o: ../BinarySearchTree.h
+CMakeFiles/AVL.dir/BinarySearchTree.cpp.o: ../player.h
 
 CMakeFiles/AVL.dir/SquidGame.cpp.o: ../BinarySearchTree.h
 CMakeFiles/AVL.dir/SquidGame.cpp.o: ../SquidGame.cpp

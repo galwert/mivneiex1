@@ -12,7 +12,6 @@ namespace Ehsan
         num_of_players(0),
         players_by_rank(),
         champion(nullptr)
-
     {}
 
     void Group::addPlayer(const std::shared_ptr<Player>& player)
