@@ -1,6 +1,7 @@
 //
-// Created by galwe on 19/11/2021.
+// Created by galwe on 08/12/2021.
 //
+
 
 #ifndef AVL_BINARYSEARCHTREE_H
 #define AVL_BINARYSEARCHTREE_H
@@ -56,7 +57,7 @@ namespace Ehsan {
             }
             return (countNodes(node->left) + countNodes(node->right) + 1);
         }
-        BSTNode<T,S> *removeInternal(BSTNode<T,S> *node);
+        void removeInternal(BSTNode<T,S> *root,S key);
 
         static BSTNode<T,S> *leftRotate(BSTNode<T,S> *x) {
 
@@ -65,6 +66,9 @@ namespace Ehsan {
 
             y->left = x;
             x->right = T2;
+            if(T2!=nullptr) {
+                T2->parent = x;
+            }
             if (x->parent != nullptr) {
                 if (x->parent->right == x) {
                     x->parent->right = y;
@@ -74,7 +78,6 @@ namespace Ehsan {
             }
             y->parent = x->parent;
             x->parent = y;
-
             x->height = getHeight(x);
             y->height = getHeight(y);
             return y;
@@ -87,6 +90,9 @@ namespace Ehsan {
 
             x->right = y;
             y->left = T2;
+            if(T2!=nullptr) {
+                T2->parent = y;
+            }
             if (y->parent != nullptr) {
                 if (y->parent->right == y) {
                     y->parent->right = x;
@@ -131,18 +137,6 @@ namespace Ehsan {
 
         void merge(T *a, S *a_h , int na, T *b,S *b_h, int nb, T *c,S *c_h);
 
-//        static void ArrayofKey(S *keys, BSTNode<T,S> *tree,int* index) {
-//
-//            if(tree== nullptr)
-//            {
-//                return;
-//            }
-//
-//                treeToArray(keys,tree->left,index);
-//                keys[*index]=tree->key;
-//                (*index)++;
-//                treeToArray(keys,tree,index);
-//        }
         BSTNode<T,S>* getMaxNode()
         {
             BSTNode<T,S>*node=this->root;
@@ -167,7 +161,6 @@ namespace Ehsan {
         BSTNode<T,S>* insert(S key, T data);
 
         void remove(S key);
-
         BSTNode<T,S> *find(S key);
 
         BSTNode<T,S> *copyTreeInternal(BSTNode<T,S>* tree, BSTNode<T,S>* toCopy);
@@ -202,18 +195,18 @@ namespace Ehsan {
             right(node.right),
             parent(node.parent),
             height(node.height)
-            {
+    {
 
     }
 
     template<class T,class S>
     BSTNode<T,S>::BSTNode(S key, T data):
-        key(key),
-        data(data),
-        left(nullptr),
-        right(nullptr),
-        parent(nullptr),
-        height(1)
+            key(key),
+            data(data),
+            left(nullptr),
+            right(nullptr),
+            parent(nullptr),
+            height(1)
 
 
     {}
@@ -264,7 +257,7 @@ namespace Ehsan {
         // Left Right Case
         if (BF > 1 &&
             BinarySearchTree<T,S>::calcHeightDiff(this->left) < 0) {
-            BinarySearchTree<T,S>::leftRotate(this->left);
+           BinarySearchTree<T,S>::leftRotate(this->left);
             return BinarySearchTree<T,S>::rightRotate(this);
         }
 
@@ -283,13 +276,13 @@ namespace Ehsan {
         // {
         //     return (this);
         // }
-        return nullptr;
+        return this;
     }
 
 
     template<class T,class S>
     BSTNode<T,S> *BinarySearchTree<T,S>::copyTreeInternal(BSTNode<T,S>* tree,
-                                                      BSTNode<T,S>* toCopy) {
+                                                          BSTNode<T,S>* toCopy) {
         if (toCopy == nullptr) {
             tree = nullptr;
         } else {
@@ -302,7 +295,7 @@ namespace Ehsan {
                 tree->right->parent = tree;
                 tree->left->parent = tree;
             }
-            
+
 
         }
         return tree;
@@ -316,12 +309,13 @@ namespace Ehsan {
 
     template<class T,class S>
     void BinarySearchTree<T,S>::treeDelete(BSTNode<T,S>* toDelete) {
-        if (toDelete == nullptr) {
-            return;
+        if (toDelete != nullptr) {
+
+            treeDelete(toDelete->left);
+            treeDelete(toDelete->right);
+            //delete toDelete;
+            toDelete = nullptr;
         }
-        treeDelete(toDelete->right);
-        treeDelete(toDelete->left);
-        delete toDelete;
     }
     template<class T,class S>
     void printTree(BSTNode<T,S> * root) {
@@ -335,27 +329,58 @@ namespace Ehsan {
         printTree(root->right);
     }
     template<class T,class S>
-    BSTNode<T,S> *insertInternal(BSTNode<T,S> *node, S key, T data) {
-        if (key <= node->key) {
-            if (node->left == nullptr) {
-                node->left = new BSTNode<T,S>(key, data);
-                node->left->parent = node;
-                return node;
-            } else {
-                return insertInternal(node->left, key, data);
+    void insertInternal(BSTNode<T,S> *node, S key, T data) {
+
+        if (key > node->key) {
+            if(node->right==nullptr)
+            {
+                node->right= new BSTNode<T,S>(key, data);
+                node->right->parent=node;
             }
-        } else {
-            if (node->right == nullptr) {
-                node->right = new BSTNode<T,S>(key, data);
-                node->right->parent = node;
-                return node;
-            } else {
-                return insertInternal(node->right, key, data);
+            else {
+                insertInternal(node->right, key, data);
+                rebalance(node);
+            }
+
+        }
+        if (key < node->key) {
+            if(node->left==nullptr)
+            {
+                node->left= new BSTNode<T,S>(key, data);
+                node->left->parent=node;
+            }
+            else {
+                insertInternal(node->left, key, data);
+                rebalance(node);
             }
         }
 
-
     }
+
+//    template<class T,class S>
+//    void insertInternal(BSTNode<T,S> *node, S key, T data) {
+//
+//        if (key < node->key) {
+//            if (node->left == nullptr) {
+//                BSTNode<T,S>*temp = new BSTNode<T,S>(key, data);
+//                temp->parent = node;
+//                node->left=temp;
+//            } else {
+//                insertInternal(node->left, key, data);
+//            }
+//        } if (key > node->key) {
+//            if (node->right == nullptr) {
+//                BSTNode<T,S>*temp = new BSTNode<T,S>(key, data);
+//                temp->parent = node;
+//                node->right=temp;
+//            } else {
+//                insertInternal(node->right, key, data);
+//            }
+//        }
+//        node->height = BinarySearchTree<T,S>::getHeight(node);
+//        node->roll();
+//
+//    }
 
     template<class T,class S>
     BSTNode<T,S> *BinarySearchTree<T,S>::insert(S key, T data) {
@@ -365,19 +390,14 @@ namespace Ehsan {
             this->root=newnode;
             return this->root;
         }
-        BSTNode<T,S> *node = insertInternal(this->root, key, data);
-        BSTNode<T,S>* place=node;
-        while (node->parent != nullptr) {
+        insertInternal(this->root, key, data);
 
-            node->roll();
-            node->height = BinarySearchTree<T,S>::getHeight(node);
-            node = node->parent;
-        }
+
         if (this->root->parent!= nullptr) {
             this->root = this->root->parent;
         }
-        node->height = BinarySearchTree<T,S>::getHeight(node);
-        return place;
+//        node->height = BinarySearchTree<T,S>::getHeight(node);
+        return nullptr;
     }
 
 
@@ -394,80 +414,162 @@ namespace Ehsan {
         }
         return curr;
     }
-
     template<class T,class S>
     int BinarySearchTree<T,S>::calcHeightDiff(BSTNode<T,S> *node) {
         return getHeight(node->left) - getHeight(node->right);
     }
+//    template<class T,class S>
+//    void BinarySearchTree<T,S>::remove(S key) {
+//        this->root=this->removeInternal(this->root,key);
+//    }
+//    template<class T,class S>
+//    BSTNode<T,S> BinarySearchTree<T,S>::removeInternal(BSTNode<T,S>* root,S key) {
+//        {
+//            BSTNode<T, S> *toDelete = find(key);
+//            if (toDelete == nullptr) {
+//                return nullptr;
+//            }
+//            if ((toDelete->right != nullptr && toDelete->left != nullptr) ||
+//                (toDelete->parent == nullptr && toDelete->right != nullptr)) {
+//                BSTNode<T, S> *succ = toDelete->right;
+//                while (succ != nullptr && succ->left != nullptr) {
+//                    succ = succ->left;
+//                }
+//                T tempdata = succ->data;
+//                S tempkey = succ->key;
+//                succ->key = toDelete->key;
+//                succ->data = toDelete->data;
+//                toDelete->data = succ->data;
+//                toDelete->key = succ->key;
+//            } else if (toDelete->parent == nullptr && toDelete->left != nullptr) {
+//                BSTNode<T, S> *succ = toDelete->left;
+//                T tempdata = succ->data;
+//                S tempkey = succ->key;
+//                succ->key = toDelete->key;
+//                succ->data = toDelete->data;
+//                toDelete->data = succ->data;
+//                toDelete->key = succ->key;
+//            }
+//            BSTNode<T, S> *child = toDelete->left ? toDelete->left : toDelete->right;
+//            if (child) {
+//                child->parent = toDelete->parent;
+//            }
+//            BSTNode<T, S> *parentNode = nullptr;
+//            if (toDelete->parent) {
+//                parentNode = toDelete->parent;
+//                if (parentNode->left == toDelete) {
+//                    parentNode->left = child;
+//                } else {
+//                    parentNode->right = child;
+//                }
+//            }
+//            toDelete->left = nullptr;
+//            toDelete->right = nullptr;
+//            delete toDelete;
+//            BSTNode<T, S> *newroot = parentNode;
+//            while (parentNode != nullptr) {
+//                parentNode = parentNode->roll();
+//                newroot = parentNode;
+//                parentNode = parentNode->parent;
+//            }
+//            return newroot;
+//        }
+//    }
+//
+    template<class T,class S>
+    void rebalance (BSTNode<T,S>* start)
+    {
+        if(start==nullptr)
+            return;
+        while (start != nullptr)
+        {
+            start=start->roll();
+            start->height = BinarySearchTree<T, S>::getHeight(start);
 
+            start=start->parent;
+
+        }
+
+    }
     template<class T,class S>
     void BinarySearchTree<T,S>::remove(S key) {
-        BSTNode<T,S> *toDelete = find(key); 
+        BSTNode<T,S> *toDelete = find(key);
         if (toDelete == nullptr) {
             return;
         }
-        BSTNode<T,S> *node = removeInternal(toDelete);
-        if (node == nullptr)
+        if (toDelete == this->root)
         {
-            //which means that node is the root and the only node in the tree - saleh?
-            this->root = nullptr;
-        }
-        
-        while (node != this->root && node != nullptr) {//added nullptr check by saleh, necessary?
-            node->roll();
-            node->height = BinarySearchTree<T,S>::getHeight(node);
-            node = node->parent;
-        }
-        if (node->parent != nullptr)
+            if(this->root->right==nullptr||this->root->left==nullptr)
             {
-                this->root = this->root->parent;
+                BSTNode<T, S> *temp = this->root->left ? this->root->left : this->root->right;
+                delete this->root;
+                this->root=temp;
+                if(temp==nullptr)
+                {
+                    return;
+                }
+                temp->height=1;
+                temp->parent=nullptr;
+                return;
             }
-
-
-        if (node != nullptr)
-        {
-            node->height = BinarySearchTree<T,S>::getHeight(node);//saleh?
         }
-        
+
+        removeInternal(toDelete,key);
+        if(this->root!=nullptr&&this->root->parent!=nullptr)
+        {
+            this->root=this->root->parent;
+        }
     }
 
     template<class T,class S>
-    BSTNode<T,S> *BinarySearchTree<T,S>::removeInternal(BSTNode<T,S> *node) {
-        if ((node->left == nullptr) ||
-            (node->right == nullptr)) {
-            BSTNode<T,S> *successor = node->left ?
-                                    node->left :
-                                    node->right;
-            if (node->parent != nullptr) {
-
-                if (node->parent->right == node) {
-                    node->parent->right = successor;
+    void BinarySearchTree<T,S>::removeInternal(BSTNode<T,S>* root,S key) {
+        if (root == nullptr)
+            return;
+//        if (key < root->key) {
+//            removeInternal(root->left, key);
+//        }
+//
+//        else if (key > root->key) {
+//            removeInternal(root->right, key);
+//        }
+//        else {
+            if ((root->left == nullptr) || (root->right == nullptr)) {
+                BSTNode<T, S> *temp = root->left ? root->left : root->right;
+                BSTNode<T, S> *startfrom=root->parent;
+                if (temp != nullptr) {
+                    if (root->parent->right == root) {
+                        startfrom->right = temp;
+                        temp->parent = root->parent;
+                    }
+                    if (root->parent->left == root) {
+                        startfrom->left = temp;
+                        temp->parent = root->parent;
+                    }
                 } else {
-                    node->parent->left = successor;
+                    if (root->parent->left == root) {
+                        startfrom->left = nullptr;
+                    }
+                    if (root->parent->right == root) {
+                        startfrom->right = nullptr;
+                    }
                 }
-            }
-            if (successor != nullptr) {
-                successor->parent = node->parent;
-
+                delete root;
+                rebalance(startfrom);
+                return;
             } else {
-
-                successor = node->parent;
-
+                BSTNode<T, S> *temp = root->right;
+                while (temp->left != nullptr) {
+                    temp = temp->left;
+                }
+                root->key = temp->key;
+                root->data = temp->data;
+                removeInternal(temp,temp->key);
             }
-            //delete node;
-            return successor;
-        } else {
-            BSTNode<T,S> *successor = node->right;
-            while (successor->left != nullptr) {
-                successor = successor->left;
-            }
-            node->key = successor->key;
-            node->data = successor->data;
-            BSTNode<T,S> *temp1 = removeInternal(successor);
 
-            return temp1;
         }
-    }
+
+//   }
+
 
     template<class T,class S>
     BSTNode<T,S>* BinarySearchTree<T,S>::createEmptyFullTree(S* keys,T*data,int min,int max)
@@ -499,18 +601,18 @@ namespace Ehsan {
     }
 
     template<class T,class S>
-   void BinarySearchTree<T,S>::clearLeaves(BSTNode<T,S>* root,int height, int* numberofleaves)
+    void BinarySearchTree<T,S>::clearLeaves(BSTNode<T,S>* root,int height, int* numberofleaves)
     {
         if (root == nullptr)
         {
             return;
         }
-        
+
         if( (height == 1) && (*numberofleaves) > 0 )
         {
             if(root->parent!= nullptr)
             {
-                if (root->parent->right == root) 
+                if (root->parent->right == root)
                 {
                     root->parent->right = nullptr;
                     // root->parent->height = calcHeightDiff(root->parent);
@@ -524,30 +626,30 @@ namespace Ehsan {
                 root = nullptr;//necessary? - saleh
                 (*numberofleaves)--;
             }
-            
+
         }
         if (root != nullptr)//necessary? - saleh
         {
             clearLeaves(root->right,height-1,numberofleaves);
             clearLeaves(root->left,height-1,numberofleaves);
         }
-        
+
     }
 
 
     template<class T, class S>
-    void BinarySearchTree<T, S>::merge(T *a, S *a_h , int na, T *b,S *b_h, int nb, T *c,S *c_h) 
-    {   
+    void BinarySearchTree<T, S>::merge(T *a, S *a_h , int na, T *b,S *b_h, int nb, T *c,S *c_h)
+    {
         int ia, ib, ic;
         for(ia = ib = ic = 0; (ia < na) && (ib < nb); ic++)
         {
-            if(a_h[ia] < b_h[ib]) 
+            if(a_h[ia] < b_h[ib])
             {
                 c[ic] = a[ia];
                 c_h[ic] = a_h[ia];
                 ia++;
             }
-            else 
+            else
             {
                 c[ic] = b[ib];
                 c_h[ic] = b_h[ib];
@@ -560,7 +662,7 @@ namespace Ehsan {
             c_h[ic] = a_h[ia];
         }
         for(;ib < nb; ib++, ic++)
-        { 
+        {
             c[ic] = b[ib];
             c_h[ic] = b_h[ib];
         }
@@ -583,6 +685,7 @@ namespace Ehsan {
             }
             return;
         }
+
         int *index = new int();
         S this_keys [this_nodes];
         T this_data [this_nodes];

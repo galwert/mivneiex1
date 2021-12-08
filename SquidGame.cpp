@@ -97,9 +97,11 @@ namespace Ehsan
 
         if (player_to_remove_node == nullptr)
         {
+            
             return FAILURE;
         }
         std::shared_ptr<Player> player_to_remove = player_to_remove_node->data;
+        int count=this->groups_with_players.countNodes(this->groups_with_players.root);
         std::shared_ptr<Group> group_to_find = this->groups_with_players.find(player_to_remove->groupid)->data;
         group_to_find->RemovePlayer(player_to_remove->playerlevel,player_to_remove->playerid);
         if ( group_to_find->num_of_players <= 0)
@@ -133,12 +135,8 @@ namespace Ehsan
         {
             return INVALID_INPUT;
         }
-        int count=this->groups_with_players.countNodes(this->groups_with_players.root);
+
         BSTNode<std::shared_ptr<Group>,int> *group_to_remove_node = this->groups.find(GroupID);//->ind should be in BST
-        if(count==6)
-        {
-            std::cout<<"";
-        }
         BSTNode<std::shared_ptr<Group>,int> *replacement_group_node = this->groups.find(ReplacementID);//find should be in BST
         if (replacement_group_node == nullptr || group_to_remove_node == nullptr)
         {
@@ -161,11 +159,8 @@ namespace Ehsan
                 this->groups_with_players.insert(ReplacementID,replacement_group);
                 (this->num_of_groups_with_players)++;
             }
-            count=this->groups_with_players.countNodes(this->groups_with_players.root);
             group_to_remove->ReplaceGroup(replacement_group);
-            count=this->groups_with_players.countNodes(this->groups_with_players.root);
             this->groups.remove(group_to_remove->group_id);
-            count=this->groups_with_players.countNodes(this->groups_with_players.root);
         }catch(const std::bad_alloc& e){
             return ALLOCATION_ERROR;
         }
@@ -185,12 +180,8 @@ namespace Ehsan
             //a player with this identifier doesnt exist
             return FAILURE;
         }
-
+        int count=this->groups_with_players.countNodes(this->groups_with_players.root);
         std::shared_ptr<Player> player_to_find = player_to_find_node->data;
-        if(PlayerID==1525827268)
-        {
-            std::cout<<"dfgb";
-        }
         std::shared_ptr<Group> group_to_find = this->groups_with_players.find(player_to_find->groupid)->data;
         this->players_by_level.remove(IDRank(player_to_find->playerlevel,PlayerID));
 

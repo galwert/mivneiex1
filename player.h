@@ -35,7 +35,7 @@ namespace Ehsan {
                 {
                     return ( this->rank < other.rank );
                 }
-                return (this->ID < other.ID);
+                return (this->ID > other.ID);
             }
             bool operator>=(const IDRank& other) const
             {

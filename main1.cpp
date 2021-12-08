@@ -14,43 +14,45 @@ void printTree(BSTNode<int,int> * root) {
 
     printTree(root->left);
     std::cout<<root->key;
-    std::cout<<" BF: "<<BinarySearchTree<std::shared_ptr<Player>,int>::calcHeightDiff(root)<<" Height: "<<root->height-1<<std::endl;
+    std::cout<<" BF: "<<BinarySearchTree<int,int>::calcHeightDiff(root)<<" Height: "<<root->height-1<<std::endl;
     printTree(root->right);
 }
-int main1()
+void print2DUtil(BSTNode<int,int> *root, int space)
 {
-//    BinarySearchTree<int>* tree=new BinarySearchTree<int>();
-//
-//    /* Constructing tree given in
-//    the above figure */
-//    tree->insert(8);
-//
-//    tree->insert( 5);
-//    tree->insert(10);
-//    tree->insert(9);
-//    tree->insert(0);
-//    tree->insert( 6);
-//    tree->insert( 11);
-//    tree->insert( 1);
-//    printBT(tree->root);
-//    tree->insert(1);
-//    printBT(tree->root);
-//    tree->insert( 2);
-//    printBT(tree->root);
-//    /* The constructed AVL Tree would be
-//            9
-//        / \
-//        1 10
-//        / \ \
-//    0 5 11
-//    / / \
-//    -1 2 6
-//    */
-//
-//
-//    tree->remove(tree->root, 10);
-//
-   printBT(tree->root);
+    // Base case
+    if (root == NULL)
+        return;
+
+    // Increase distance between levels
+    space += 10;
+
+    // Process right child first
+    print2DUtil(root->right, space);
+
+    // Print current node after space
+    // count
+    std::cout<<std::endl;
+    for (int i = 10; i < space; i++)
+        std::cout<<" ";
+    std::cout<<root->data<<"\n";
+
+    // Process left child
+    print2DUtil(root->left, space);
+}
+
+// Wrapper over print2DUtil()
+void print2D(BSTNode<int,int> *root)
+{
+    // Pass initial space count as 0
+    print2DUtil(root, 0);
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+    std::cout<<std::endl;
+
 }
 int main1(){
     BinarySearchTree<int,int> tree;
@@ -511,33 +513,58 @@ int main1(){
     tree.treeDelete(tree.root);
     tree.root= nullptr;
 
+    tree.insert(3,3);
+    tree.insert(6,6);
+    print2D(tree.root);
+    tree.insert(2,2);
+    print2D(tree.root);
+    tree.insert(5,5);
+    print2D(tree.root);
+    tree.insert(7,7);
+    print2D(tree.root);
+    tree.insert(4,4);
+    print2D(tree.root);
+    tree.insert(9,9);
+    print2D(tree.root);
+    tree.insert(1,1);
+    print2D(tree.root);
+    tree.insert(8,8);
+    print2D(tree.root);
+    tree.remove(3);
+    print2D(tree.root);
+    tree.remove(6);
+    print2D(tree.root);
+    tree.remove(2);
+    print2D(tree.root);
+    tree.remove(5);
+    print2D(tree.root);
+    tree.remove(7);
+    print2D(tree.root);
+    tree.remove(4);
+    print2D(tree.root);
     std::vector<int> vector;
-    for (int i=1; i<=100; i++) vector.push_back(i);
+    for (int i=1; i<100; i++) vector.push_back(i);
 
-    //Randomly insert and removes nodes
-//    for (int k = 0; k < 20; ++k) {
-//        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-//        shuffle (vector.begin(), vector.end(), std::default_random_engine(seed));
-//        for (std::vector<int>::iterator it = vector.begin() ; it != vector.end(); it++){
-//            tree.insert(*it,*it);
-//
-//        }
-//        printTree(tree.root);
-//        std::cout<<std::endl;
-//        shuffle (vector.begin(), vector.end(), std::default_random_engine(seed));
-//        for (std::vector<int>::iterator it = vector.begin() ; it != vector.end(); ++it){
-//
-//            tree.remove(*it);
-//
-//
-//        }
-//                  printTree(tree.root);
-//          std::cout<<std::endl;
-//        tree.treeDelete(tree.root);
-//        tree.root= nullptr;
-//        std::cout<<std::endl;
-//        std::cout << '\n';
-//    }
+
+    for (int k = 0; k <= 0; ++k) {
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+        shuffle (vector.begin(), vector.end(), std::default_random_engine(seed));
+        for (std::vector<int>::iterator it = vector.begin() ; it != vector.end(); it++){
+            tree.insert(*it,*it);
+
+        }
+        //shuffle (vector.begin(), vector.end(), std::default_random_engine(seed));
+        for (std::vector<int>::iterator it = vector.begin() ; it != vector.end(); ++it){
+            print2D(tree.root);
+            tree.remove(*it);
+
+        }
+          std::cout<<std::endl;
+        tree.treeDelete(tree.root);
+        tree.root= nullptr;
+        std::cout<<std::endl;
+        std::cout << '\n';
+    }
 
     return 0;
 }

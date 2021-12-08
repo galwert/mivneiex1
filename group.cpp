@@ -38,6 +38,7 @@ namespace Ehsan
     void Group::RemovePlayer(int playerrank,int playerid)
     {
         (this->num_of_players)--;
+        this->players_by_rank.remove(IDRank(playerrank,playerid));
         if( (this->champion->playerid) == playerid)
         {
             BSTNode<std::shared_ptr<Player>,IDRank> *maxnode = this->players_by_rank.getMaxNode();
@@ -50,7 +51,7 @@ namespace Ehsan
                 this->champion = nullptr;//added by saleh, necessary?
             }
         }
-        this->players_by_rank.remove(IDRank(playerrank,playerid));
+
         return;
     }
 
