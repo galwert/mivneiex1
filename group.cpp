@@ -27,7 +27,7 @@ namespace Ehsan
             this->champion =player;
             return;
         }
-        if( (this->champion->playerlevel) == (player->playerlevel) && (this->champion->playerid) < (player->playerid) )
+        if( (this->champion->playerlevel) == (player->playerlevel) && (this->champion->playerid) > (player->playerid) )
         {
             this->champion =player;
             return;
